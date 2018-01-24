@@ -164,7 +164,12 @@ AliAnalysisTaskSEpPbCorrelationsForward::AliAnalysisTaskSEpPbCorrelationsForward
       fPiCheckMom(0),
       fPiCheck(0),
       fmultreffmd(0),
+      fPrimEtaPhi(0),
+      fMultRefEtaPhi(0),
+      fRefEtaPhi(0),
+      fRefEtaPhiNotCorr(0),
       fdNdetaOrigin(0),
+      fdNdetaOriginVZERO(0),
       fdNdetaOriginMulthit(0),
       fITS(0),
       fFMD1(0),
@@ -316,7 +321,12 @@ AliAnalysisTaskSEpPbCorrelationsForward::AliAnalysisTaskSEpPbCorrelationsForward
       fPiCheckMom(0),
       fPiCheck(0),
       fmultreffmd(0),
+      fPrimEtaPhi(0),
+      fMultRefEtaPhi(0),
+      fRefEtaPhi(0),
+      fRefEtaPhiNotCorr(0),
       fdNdetaOrigin(0),
+      fdNdetaOriginVZERO(0),
       fdNdetaOriginMulthit(0),
       fITS(0),
       fFMD1(0),
@@ -624,18 +634,41 @@ void AliAnalysisTaskSEpPbCorrelationsForward::DefinedQAHistos() {
     
     fmultreffmd=new TH1F("fmultreffmd","fmultreffmd",20,0,20);
     fOutputList2->Add(fmultreffmd);
+    
+    fPrimEtaPhi=new TH2F("fPrimEtaphi","dN/d#eta dN/d#phi",200, -4,6, 20, 0, 2*TMath::Pi());
+    fOutputList2->Add(fPrimEtaPhi);
+    fRefEtaPhi=new TH2F("fRefetaphi","dN/d#eta dN/d#phi",200, -4,6, 20, 0, 2*TMath::Pi());
+    fOutputList2->Add(fRefEtaPhi);
+    fRefEtaPhiNotCorr=new TH2F("fRefetaphiNotcorr","dN/d#eta dN/d#phi",200, -4,6, 20, 0, 2*TMath::Pi());
+    fOutputList2->Add(fRefEtaPhiNotCorr);
+    fMultRefEtaPhi=new TH2F("fMultRefetaphi","dN/d#eta dN/d#phi",200, -4,6, 20, 0, 2*TMath::Pi());
+    fOutputList2->Add(fMultRefEtaPhi);
+    
+
 
     fdNdetaOrigin = new TH2F("dNdetaOrigin", "dN/d#eta Origins",200, -4, 6,cOriginType::kNORIGINTYPES, -0.5, cOriginType::kNORIGINTYPES-0.5);
-    TAxis *ax = fdNdetaOrigin->GetYaxis();
-    ax->SetBinLabel(cOriginType::kGen+1 , "Gen");
-    ax->SetBinLabel(cOriginType::kPRIMARY+1 , "Primary");
-    ax->SetBinLabel(cOriginType::kEARLYDECAY+1 , "Early decay");
-    ax->SetBinLabel(cOriginType::kPIPE+1 , "Beam pipe");
-    ax->SetBinLabel(cOriginType::kITS+1 , "ITS & support structure");
-    ax->SetBinLabel(cOriginType::kFMD+1 , "FMD & support structure");
-    ax->SetBinLabel(cOriginType::kSecondaryfromweakdecay+1 , "Secondary from weakdecay");
-    ax->SetBinLabel(cOriginType::kOTHER+1 , "Others");
+    fdNdetaOrigin->GetYaxis()->SetBinLabel(cOriginType::kGen+1 , "Gen");
+    fdNdetaOrigin->GetYaxis()->SetBinLabel(cOriginType::kPRIMARY+1 , "Primary");
+    fdNdetaOrigin->GetYaxis()->SetBinLabel(cOriginType::kEARLYDECAY+1 , "Early decay");
+    fdNdetaOrigin->GetYaxis()->SetBinLabel(cOriginType::kPIPE+1 , "Beam pipe");
+    fdNdetaOrigin->GetYaxis()->SetBinLabel(cOriginType::kITS+1 , "ITS & support structure");
+    fdNdetaOrigin->GetYaxis()->SetBinLabel(cOriginType::kFMD+1 , "FMD & support structure");
+    fdNdetaOrigin->GetYaxis()->SetBinLabel(cOriginType::kSecondaryfromweakdecay+1 , "Secondary from weakdecay");
+    fdNdetaOrigin->GetYaxis()->SetBinLabel(cOriginType::kOTHER+1 , "Others");
     fOutputList2->Add(fdNdetaOrigin);
+
+    fdNdetaOriginVZERO = new TH2F("dNdetaOriginVZERO", "dN/d#eta Origins",200, -4, 6,cOriginType::kNORIGINTYPES, -0.5, cOriginType::kNORIGINTYPES-0.5);
+    TAxis *ax = fdNdetaOriginVZERO->GetYaxis();
+     fdNdetaOriginVZERO->GetYaxis()->SetBinLabel(cOriginType::kGen+1 , "Gen");
+     fdNdetaOriginVZERO->GetYaxis()->SetBinLabel(cOriginType::kPRIMARY+1 , "Primary");
+     fdNdetaOriginVZERO->GetYaxis()->SetBinLabel(cOriginType::kEARLYDECAY+1 , "Early decay");
+     fdNdetaOriginVZERO->GetYaxis()->SetBinLabel(cOriginType::kPIPE+1 , "Beam pipe");
+     fdNdetaOriginVZERO->GetYaxis()->SetBinLabel(cOriginType::kITS+1 , "ITS & support structure");
+     fdNdetaOriginVZERO->GetYaxis()->SetBinLabel(cOriginType::kFMD+1 , "FMD & support structure");
+     fdNdetaOriginVZERO->GetYaxis()->SetBinLabel(cOriginType::kSecondaryfromweakdecay+1 , "Secondary from weakdecay");
+     fdNdetaOriginVZERO->GetYaxis()->SetBinLabel(cOriginType::kOTHER+1 , "Others");
+    fOutputList2->Add(fdNdetaOriginVZERO);
+
 
     fdNdetaOriginMulthit = new TH2F("dNdetaOriginMulthit", "dN/d#eta Origins",200, -4, 6,cOriginType::kNORIGINTYPES, -0.5, cOriginType::kNORIGINTYPES-0.5);
     fdNdetaOriginMulthit->GetYaxis()->SetBinLabel(cOriginType::kGen+1 , "Gen");
@@ -1542,8 +1575,19 @@ void AliAnalysisTaskSEpPbCorrelationsForward::MakeAna() {
       //if(!(IsHitFMD(track) || IsHitITS(track))) continue;
       
       if (AliTrackReference *ref = IsHitFMD(track)) {
-        if(TrIsPrim) fdNdetaOrigin->Fill(mcTrackEta,cOriginType::kGen);
-        fdNdetaOrigin->Fill(GetRefEta(ref),(Double_t)GetOriginType(track));
+        if(TrIsPrim) {
+          fdNdetaOrigin->Fill(mcTrackEta,cOriginType::kGen);
+          fPrimEtaPhi->Fill(mcTrackEta,mcTrackPhi);
+        }
+        fdNdetaOrigin->Fill(GetRefEta(ref,kTRUE),(Double_t)GetOriginType(track));
+        fRefEtaPhi->Fill(GetRefEta(ref,kTRUE),GetRefPhi(ref,kTRUE)); 
+        fRefEtaPhiNotCorr->Fill(GetRefEta(ref,kFALSE),GetRefPhi(ref,kFALSE));
+      }
+      
+      if(AliTrackReference* ref=IsHitVZERO(track)){
+        if(TrIsPrim) fdNdetaOriginVZERO->Fill(mcTrackEta,cOriginType::kGen);
+        fdNdetaOriginVZERO->Fill(GetRefEta(ref,kTRUE),(Double_t)GetOriginType(track));
+        //Error include material is not include from VZERO
       }
       
       // Fill at most one reference per particle from an ITS hit into the origin hist
@@ -1597,7 +1641,7 @@ void AliAnalysisTaskSEpPbCorrelationsForward::MakeAna() {
       AliMCParticle* mom = (AliMCParticle*)mcEvent->GetTrack(momind);
 
       //Count number of not-primary electrons from pion and decay particles from Heavy flavor and sigma0
-      if(rstack->IsPhysicalPrimary(iTracks) && iTracks>nprim){
+      if(IsHitFMD(track) && rstack->IsPhysicalPrimary(iTracks) && iTracks>nprim){
         switch(TMath::Abs(mom->PdgCode())) {
          case 111:
            fPiCheckMom->Fill(cMotherType::kPi0);
@@ -1664,8 +1708,9 @@ void AliAnalysisTaskSEpPbCorrelationsForward::MakeAna() {
         if (AliTrackReference::kFMD!=ref->DetectorId()) continue;// Select FMD
         nfmdhits++;
         
-        fdNdetaOriginMulthit->Fill(GetRefEta(ref),(Double_t)GetOriginType(track1));
-        
+        fdNdetaOriginMulthit->Fill(GetRefEta(ref,kTRUE),(Double_t)GetOriginType(track1));
+        fMultRefEtaPhi->Fill(GetRefEta(ref,kFALSE),GetRefPhi(ref,kFALSE));
+
         /*
         if(mcEvent->IsPhysicalPrimary(iTracks)){
           //          fh2_FMD_eta_phi_prim->Fill(GetRefEta(ref),GetRefPhi(ref));
@@ -3306,6 +3351,21 @@ AliTrackReference* AliAnalysisTaskSEpPbCorrelationsForward::IsHitFMD(AliMCPartic
   return 0x0;
 }
 
+AliTrackReference* AliAnalysisTaskSEpPbCorrelationsForward::IsHitVZERO(AliMCParticle* p) {
+  for (Int_t iTrRef = 0; iTrRef < p->GetNumberOfTrackReferences(); iTrRef++) { 
+    AliTrackReference* ref = p->GetTrackReference(iTrRef);
+    // Check hit on FMD
+    if (!ref || AliTrackReference::kVZERO != ref->DetectorId()) {
+      continue;
+    }
+    else {
+      return ref;
+    }
+  }
+  return 0x0;
+}
+
+
 AliTrackReference* AliAnalysisTaskSEpPbCorrelationsForward::IsHitITS(AliMCParticle* p) {
   for (Int_t iTrRef = 0; iTrRef < p->GetNumberOfTrackReferences(); iTrRef++) { 
     AliTrackReference* ref = p->GetTrackReference(iTrRef);
@@ -3322,13 +3382,20 @@ AliTrackReference* AliAnalysisTaskSEpPbCorrelationsForward::IsHitITS(AliMCPartic
   return 0x0;
 }
 
-Double_t AliAnalysisTaskSEpPbCorrelationsForward::GetRefEta(AliTrackReference*ref){
-  Float_t x=ref->X()-tPrimaryVtxPosition[0];
-  Float_t y=ref->Y()-tPrimaryVtxPosition[1];
-  Float_t z=ref->Z()-tPrimaryVtxPosition[2];
-  //  Float_t r = TMath::Sqrt(ref->X()*ref->X()+ref->Y()*ref->Y());
+Double_t AliAnalysisTaskSEpPbCorrelationsForward::GetRefEta(AliTrackReference*ref,Bool_t vertexcorr){
+  Float_t x;
+  Float_t y;
+  Float_t z;
+  if(vertexcorr){
+    x =ref->X()-tPrimaryVtxPosition[0];
+    y =ref->Y()-tPrimaryVtxPosition[1];
+    z =ref->Z()-tPrimaryVtxPosition[2];
+  }else{
+    x =ref->X();
+    y =ref->Y();
+    z =ref->Z();
+  }
   Float_t r = TMath::Sqrt(x*x+y*y);
-  //  Float_t z=ref->Z();
   Float_t zv=TMath::Abs(z);
   if(z<0) zv=-1.*zv;
   Double_t theta=TMath::ATan2(r,zv);
@@ -3336,10 +3403,19 @@ Double_t AliAnalysisTaskSEpPbCorrelationsForward::GetRefEta(AliTrackReference*re
   return etav;
 }
 
-Double_t AliAnalysisTaskSEpPbCorrelationsForward::GetRefPhi(AliTrackReference*ref){
-  Float_t x=ref->X()-tPrimaryVtxPosition[0];
-  Float_t y=ref->Y()-tPrimaryVtxPosition[1];
-  Float_t z=ref->Z()-tPrimaryVtxPosition[2];
+Double_t AliAnalysisTaskSEpPbCorrelationsForward::GetRefPhi(AliTrackReference*ref,Bool_t vertexcorr){
+  Float_t x;
+  Float_t y;
+  Float_t z;
+  if(vertexcorr){
+    x =ref->X()-tPrimaryVtxPosition[0];
+    y =ref->Y()-tPrimaryVtxPosition[1];
+    z =ref->Z()-tPrimaryVtxPosition[2];
+  }else{
+    x =ref->X();
+    y =ref->Y();
+    z =ref->Z();
+  }
   Double_t phiv = TMath::ATan2(y,x);
   if(phiv<0) phiv=phiv+2*TMath::Pi();
   return phiv;
@@ -3356,23 +3432,27 @@ Int_t AliAnalysisTaskSEpPbCorrelationsForward::GetOriginType(AliMCParticle *p) {
     return cOriginType::kSecondaryfromweakdecay;
   }
   Double_t r = TMath::Sqrt(p->Yv() * p->Yv() + p->Xv() * p->Xv());
-  
-  if (fITS->IsInside(p->Zv(), r)) {
-    return cOriginType::kITS;
-  }
-  if (this->fFMD1->IsInside(p->Zv(), r) ||
-      this->fFMD2->IsInside(p->Zv(), r) ||
-      this->fFMD3->IsInside(p->Zv(), r)) {
-    return cOriginType::kFMD;
-  }
-  if (this->fPipe->IsInside(p->Zv(), r)) {
-    return cOriginType::kPIPE;
-  }
-  if (this->fEarlyDecay->IsInside(p->Zv(), r)) {
-    return cOriginType::kEARLYDECAY;
-  }
  
-  return cOriginType::kOTHER;
+  if(stack->IsSecondaryFromMaterial(p->GetLabel())){//cut non-stable product or one of the beam
+    if (fITS->IsInside(p->Zv(), r)) {
+      return cOriginType::kITS;
+    }
+    if (this->fFMD1->IsInside(p->Zv(), r) ||
+        this->fFMD2->IsInside(p->Zv(), r) ||
+      this->fFMD3->IsInside(p->Zv(), r)) {
+      return cOriginType::kFMD;
+    }
+    if (this->fPipe->IsInside(p->Zv(), r)) {
+      return cOriginType::kPIPE;
+  }
+    if (this->fEarlyDecay->IsInside(p->Zv(), r)) {
+      return cOriginType::kEARLYDECAY;
+  }
+    
+    return cOriginType::kOTHER;
+  }
+
+  return cOriginType::kNORIGINTYPES;
 }
 
 

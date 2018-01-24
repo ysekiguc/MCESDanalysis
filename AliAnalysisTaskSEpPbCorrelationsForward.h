@@ -111,9 +111,10 @@ private:
   Double_t RangePhi2(Double_t DPhi);
   
   AliTrackReference* IsHitFMD(AliMCParticle*p);
+  AliTrackReference* IsHitVZERO(AliMCParticle*p);
   AliTrackReference* IsHitITS(AliMCParticle*p);
-  Double_t GetRefEta(AliTrackReference*ref);
-  Double_t GetRefPhi(AliTrackReference*ref);
+  Double_t GetRefEta(AliTrackReference*ref,Bool_t vertexcorr);
+  Double_t GetRefPhi(AliTrackReference*ref,Bool_t vertexcorr);
   Int_t GetOriginType(AliMCParticle*p);
   void SetupCuts();
 
@@ -304,7 +305,12 @@ private:
   TH1F* fPiCheckMom;
   TH1F* fPiCheck;
   TH1F*fmultreffmd;
+  TH2F* fPrimEtaPhi;
+  TH2F* fRefEtaPhi;
+  TH2F* fRefEtaPhiNotCorr;
+  TH2F* fMultRefEtaPhi;
   TH2F *fdNdetaOrigin;
+  TH2F *fdNdetaOriginVZERO;
   TH2F *fdNdetaOriginMulthit;
   TCutG *fITS;  //!
   TCutG *fFMD1;  //!
