@@ -1429,6 +1429,7 @@ void AliAnalysisTaskSEpPbCorrelationsForward::MakeAna() {
         }
       }
       //cout<<"# of IsSelected Particles="<<j<<" : number of label error="<<error<<" nprim="<<nprim<<" np="<<np<<endl;
+      /*
       Int_t hoge2=0;
       for (Int_t ip = 0; ip < np; ip++){
         AliMCParticle* mcpart = (AliMCParticle*) mcEvent->GetTrack(ip);
@@ -1487,23 +1488,21 @@ void AliAnalysisTaskSEpPbCorrelationsForward::MakeAna() {
           // hoge2++;
         }
       }
-
-      //      cout<<fNEntries<<" "<<"number of setparticles=="<<hoge2<<" "<<nprim<<endl;
+      */
+      // cout<<fNEntries<<" "<<"number of setparticles=="<<hoge2<<" "<<nprim<<endl;
       
       AliStack*rstack=mcEvent->Stack();
-      //cout<<fNEntries<<" "<<mcEvent->GetNumberOfTracks()<<" "<<rstack->GetNtrack()<<endl;
-      //cout<<fNEntries<<" "<<mcEvent->GetNumberOfTracks()<<" "<<mcEvent->GetNumberOfPrimaries()<<" "<<rstack->GetNtrack()<<" "<<((TTree*)(rstack->TreeK()))->GetEntries()<<endl;
-
-    Double_t  nTracks_vzero=0;
-    Int_t nTrCount=0;
-    Int_t nTrRefs=0;
-    Int_t nV0A = 0;
-    Int_t nV0C = 0;
-    Double_t conmcprim[4];
-    Int_t hoge=0;
-    for(Int_t iTracks=0;iTracks<mcEvent->GetNumberOfTracks();iTracks++){
-        AliMCParticle* track = (AliMCParticle*)mcEvent->GetTrack(iTracks);
-        TParticle *rParticle=mcEvent->Particle(iTracks);
+      
+      Double_t  nTracks_vzero=0;
+      Int_t nTrCount=0;
+      Int_t nTrRefs=0;
+      Int_t nV0A = 0;
+      Int_t nV0C = 0;
+      Double_t conmcprim[4];
+      Int_t hoge=0;
+      for(Int_t iTracks=0;iTracks<mcEvent->GetNumberOfTracks();iTracks++){
+      AliMCParticle* track = (AliMCParticle*)mcEvent->GetTrack(iTracks);
+      TParticle *rParticle=mcEvent->Particle(iTracks);
       if (!track) {
         Error("ReadEventMC", "Could not receive particle %d", iTracks);
         continue;
@@ -1540,12 +1539,10 @@ void AliAnalysisTaskSEpPbCorrelationsForward::MakeAna() {
         fh2_FMD_eta_phi_prim->Fill(mcTrackEta,mcTrackPhi);
       }
             
-      if(!(IsHitFMD(track) || IsHitITS(track))) continue;
-      
-      if(TrIsPrim) fdNdetaOrigin->Fill(mcTrackEta,cOriginType::kGen);
-      
+      //if(!(IsHitFMD(track) || IsHitITS(track))) continue;
       
       if (AliTrackReference *ref = IsHitFMD(track)) {
+        if(TrIsPrim) fdNdetaOrigin->Fill(mcTrackEta,cOriginType::kGen);
         fdNdetaOrigin->Fill(GetRefEta(ref),(Double_t)GetOriginType(track));
       }
       
