@@ -576,12 +576,12 @@ void AliAnalysisTaskSEpPbCorrelationsForward::DefinedQAHistos() {
   fOutputList1->Add(fHistLeadQA);
 
 
-  const Int_t imcprimbin[5]={11,50,20,10,10};
+  const Int_t imcprimbin[5]={11,200,20,10,10};
   Double_t binning_pt_mcprim[12] = {0.3, 0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 2.5, 3.0,  3.5, 4.0,  8.0};
   if(!fDataType){
     fhistmcprim=new AliTHn("fhistmcprim","fhistmcprim",1,5,imcprimbin);
     fhistmcprim->SetBinLimits(0,binning_pt_mcprim);
-    fhistmcprim->SetBinLimits(1,-4.,5.);
+    fhistmcprim->SetBinLimits(1,-4.,6.);
     fhistmcprim->SetBinLimits(2,0.,2*TMath::Pi());
     fhistmcprim->SetBinLimits(3,0.,100.);
     fhistmcprim->SetBinLimits(4,-10.,10);
@@ -591,13 +591,13 @@ void AliAnalysisTaskSEpPbCorrelationsForward::DefinedQAHistos() {
     fhistmcprim->SetVarTitle(3,"centrality");
     fhistmcprim->SetVarTitle(4,"vz");
     fOutputList2->Add(fhistmcprim);
-    fhmcprimvzeta=new TH2D("fhmcprimvzeta","fhmcprimvzeta",180,-4,5,20,-10,10);
+    fhmcprimvzeta=new TH2D("fhmcprimvzeta","fhmcprimvzeta",200,-4,6,20,-10,10);
     fOutputList2->Add(fhmcprimvzeta);
     fhmcprimpdgcode=new TH1D("fhmcprimpdgcode","fhmcprimpdgcode",4000,-0.5,3999.5);
     fOutputList2->Add(fhmcprimpdgcode);
-    fh2_FMD_acceptance_prim=new TH2D("fh2_FMD_acceptance_prim","fh2_FMD_acceptance_prim",180,-4,5,200,-10,10);
+    fh2_FMD_acceptance_prim=new TH2D("fh2_FMD_acceptance_prim","fh2_FMD_acceptance_prim",200,-4,6,200,-10,10);
     fOutputList2->Add(fh2_FMD_acceptance_prim);
-    fh2_FMD_eta_phi_prim=new TH2D("fh2_FMD_eta_phi_prim","fh2_FMD_eta_phi_prim",180,-4,5,20,0,2*TMath::Pi());
+    fh2_FMD_eta_phi_prim=new TH2D("fh2_FMD_eta_phi_prim","fh2_FMD_eta_phi_prim",200,-4,6,20,0,2*TMath::Pi());
     fOutputList2->Add(fh2_FMD_eta_phi_prim);
     
     fDecayType=new TH1F("fDecaytype","fDecaytype",cDecayType::kNSPECIES,0,cDecayType::kNSPECIES);
@@ -625,7 +625,7 @@ void AliAnalysisTaskSEpPbCorrelationsForward::DefinedQAHistos() {
     fmultreffmd=new TH1F("fmultreffmd","fmultreffmd",20,0,20);
     fOutputList2->Add(fmultreffmd);
 
-    fdNdetaOrigin = new TH2F("dNdetaOrigin", "dN/d#eta Origins",180, -4, 5,cOriginType::kNORIGINTYPES, -0.5, cOriginType::kNORIGINTYPES-0.5);
+    fdNdetaOrigin = new TH2F("dNdetaOrigin", "dN/d#eta Origins",200, -4, 6,cOriginType::kNORIGINTYPES, -0.5, cOriginType::kNORIGINTYPES-0.5);
     TAxis *ax = fdNdetaOrigin->GetYaxis();
     ax->SetBinLabel(cOriginType::kGen+1 , "Gen");
     ax->SetBinLabel(cOriginType::kPRIMARY+1 , "Primary");
@@ -637,7 +637,7 @@ void AliAnalysisTaskSEpPbCorrelationsForward::DefinedQAHistos() {
     ax->SetBinLabel(cOriginType::kOTHER+1 , "Others");
     fOutputList2->Add(fdNdetaOrigin);
 
-    fdNdetaOriginMulthit = new TH2F("dNdetaOriginMulthit", "dN/d#eta Origins",180, -4, 5,cOriginType::kNORIGINTYPES, -0.5, cOriginType::kNORIGINTYPES-0.5);
+    fdNdetaOriginMulthit = new TH2F("dNdetaOriginMulthit", "dN/d#eta Origins",200, -4, 6,cOriginType::kNORIGINTYPES, -0.5, cOriginType::kNORIGINTYPES-0.5);
     fdNdetaOriginMulthit->GetYaxis()->SetBinLabel(cOriginType::kGen+1 , "Gen");
     fdNdetaOriginMulthit->GetYaxis()->SetBinLabel(cOriginType::kPRIMARY+1 , "Primary");
     fdNdetaOriginMulthit->GetYaxis()->SetBinLabel(cOriginType::kEARLYDECAY+1 , "Early decay");
