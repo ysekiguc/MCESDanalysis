@@ -157,7 +157,7 @@ private:
 	  kFMD,
 	  kOTHER,
       kSecondaryfromweakdecay,
-	  kNORIGINTYPES
+	  kNORIGINTYPES,
     };
    };
 
@@ -305,11 +305,16 @@ private:
   TH1F* fPiCheckMom;
   TH1F* fPiCheck;
   TH1F*fmultreffmd;
-  TH2F* fPrimEtaPhi;
-  TH2F* fRefEtaPhi;
+  TH1F* frefvz;
+  TH1F* frefcent;
+  TH2F* fPrimEtaPhi[10];
+  TH2F* fRefEtaPhi[10];
+  TH2F* fPrimEtaPhiCent[11];
+  TH2F* fRefEtaPhiCent[11];
   TH2F* fRefEtaPhiNotCorr;
   TH2F* fMultRefEtaPhi;
   TH2F *fdNdetaOrigin;
+  TH2F *fdNdetaOrigin2D;
   TH2F *fdNdetaOriginVZERO;
   TH2F *fdNdetaOriginMulthit;
   TCutG *fITS;  //!
@@ -319,7 +324,15 @@ private:
   TCutG *fPipe;  //!
   TCutG *fEarlyDecay;  //!
   TH2D*  fh2_FMD_acceptance_prim;
+
   TH2D*  fh2_FMD_eta_phi_prim;
+  TH2D*  fh2_FMD_eta_dphi_prim;
+  TH2D*  fh2_FMD_eta_dphi[11];
+  TH2D*  fh2_FMD_eta_deta[11];
+  THnSparseF* fhistFMDMC;
+  TH2D*  fh2_FMD_correta;
+  TH2D*  fh2_FMD_propoint;
+  TH2D*  fh2_FMD_eta_proz;
   TH2D*  fh2_FMD_acceptance;
   TH2D*  fh2_FMD_eta_phi;
   AliTHn* fhistfmd;
