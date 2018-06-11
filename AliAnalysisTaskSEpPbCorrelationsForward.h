@@ -330,6 +330,7 @@ private:
   TH2D*  fh2_FMD_eta_dphi[11];
   TH2D*  fh2_FMD_eta_deta[11];
   THnSparseF* fhistFMDMC;
+  THnSparseF* fhistFMDMCmom;
   TH2D*  fh2_FMD_correta;
   TH2D*  fh2_FMD_propoint;
   TH2D*  fh2_FMD_eta_proz;

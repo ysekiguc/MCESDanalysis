@@ -1,21 +1,21 @@
-AliAnalysisGrid* CreateAlienHandler(Bool_t isMC,Bool_t fAOD)
-  {
-
-  char *data     = "LHC17f2b_fast";
+AliAnalysisGrid* CreateAlienHandler(Bool_t isMC,Bool_t fAOD){
+  char *data     = "LHC17i2_new";
+  //char *data     = "LHC17f2b_fast";
   char *datatype = "FAST"  ;//Fast,wSDD,woSDD
   Int_t method   =  1;
 
-  if (!AliAnalysisGrid::CreateToken()) return NULL;
+  // if (!AliAnalysisGrid::CreateToken()) return NULL;
   AliAnalysisAlien *plugin = new AliAnalysisAlien();
   plugin->SetOverwriteMode();
   plugin->SetMergeViaJDL(1);
-  plugin->SetRunMode("full");
-  //plugin->SetRunMode("terminate");
-  //plugin->SetRunMode("test");
+  //  plugin->SetRunMode("full");
+     plugin->SetRunMode("terminate");
+  //  plugin->SetRunMode("test");
 
   //Set versions of used packages
  plugin->SetAPIVersion("V1.1x");
- plugin->SetAliPhysicsVersion("vAN-20180123-1");
+ // plugin->SetAliPhysicsVersion("vAN-20180123-1");
+ plugin->SetAliPhysicsVersion("vAN-20180325-1");
  
  if(!isMC){
    plugin->SetRunPrefix("000"); // IMPORTANT!
@@ -125,15 +125,15 @@ AliAnalysisGrid* CreateAlienHandler(Bool_t isMC,Bool_t fAOD)
       plugin->AddRunNumber(195675);
       plugin->AddRunNumber(195677);
     }
-  }else{
-    //   plugin->SetOutputSingleFolder("output");
-    //   plugin->SetOutputToRunNo();
-    //   Method 2: Declare existing data files (raw collections, xml collections, root file)
-    //   If no path mentioned data is supposed to be in the work directory (see SetGridWorkingDir())
-    //   XML collections added via this method can be combined with the first method if
-    //   the content is compatible (using or not tags)
-    //    if(data=="LHC16q" && datatype=="wSDD") plugin->AddDataFile("/alice/cern.ch/user/y/ysekiguc/xml/pass1_CENT_wSDD/000265305_000265525.xml");//old good run list
-    if(data=="LHC16q" && datatype=="wSDD") plugin->AddDataFile("/alice/cern.ch/user/y/ysekiguc/xml/pass1_CENT_wSDD/000265309_000265525.xml");//32 runs
+   }else{
+	 //   plugin->SetOutputSingleFolder("output");
+	 //   plugin->SetOutputToRunNo();
+	 //   Method 2: Declare existing data files (raw collections, xml collections, root file)
+	 //   If no path mentioned data is supposed to be in the work directory (see SetGridWorkingDir())
+	 //   XML collections added via this method can be combined with the first method if
+	 //   the content is compatible (using or not tags)
+	 //    if(data=="LHC16q" && datatype=="wSDD") plugin->AddDataFile("/alice/cern.ch/user/y/ysekiguc/xml/pass1_CENT_wSDD/000265305_000265525.xml");//old good run list
+	 if(data=="LHC16q" && datatype=="wSDD") plugin->AddDataFile("/alice/cern.ch/user/y/ysekiguc/xml/pass1_CENT_wSDD/000265309_000265525.xml");//32 runs
     if(data=="LHC16q" && datatype=="woSDD") plugin->AddDataFile("/alice/cern.ch/user/y/ysekiguc/xml/pass1_CENT_woSDD/000265309_000265525.xml");//32 runs
     if(data=="LHC16q" && datatype=="FAST") plugin->AddDataFile("/alice/cern.ch/user/y/ysekiguc/xml/pass1_FAST/000265309_000265525.xml");//32 runs
     if(data=="LHC15n") plugin->AddDataFile("/alice/cern.ch/user/y/ysekiguc/xml/LHC15n/pass4/000244340_000244628.xml");
@@ -180,7 +180,13 @@ AliAnalysisGrid* CreateAlienHandler(Bool_t isMC,Bool_t fAOD)
        plugin->AddRunNumber(265501);
        plugin->AddRunNumber(265521);
        plugin->AddRunNumber(265525);
-     }
+	 }else if(data=="LHC17i2_new"){
+	   cout<<" LHC17i2_new!!!!!!!!!!!!!!!!!!!!"<<endl;
+	   plugin->SetGridDataDir("/alice/sim/2017/LHC17i2_new");
+       plugin->SetDataPattern("/*/AliESDs.root");
+       plugin->AddRunNumber(245683);
+	 }
+     
    }else if(method==2){
      
       plugin->AddDataFile("/alice/cern.ch/user/y/ysekiguc/01122017_MC/265309.xml");
@@ -216,7 +222,19 @@ AliAnalysisGrid* CreateAlienHandler(Bool_t isMC,Bool_t fAOD)
       plugin->AddDataFile("/alice/cern.ch/user/y/ysekiguc/01122017_MC/265525.xml");
     }
 }
- plugin->SetGridWorkingDir("DPMJET_LHC17f2b/24012018");
+ // plugin->SetGridWorkingDir("DPMJET_LHC17f2b/24012018");
+ // plugin->SetGridWorkingDir("DPMJET_LHC17f2b/24012018_modify");
+ // plugin->SetGridWorkingDir("DPMJET_LHC17f2b/ESD/04042018");
+ // plugin->SetGridWorkingDir("DPMJET_LHC17f2b/ESD/04042018_0_5");
+ // plugin->SetGridWorkingDir("DPMJET_LHC17f2b/ESD/05042018_try2");
+ //plugin->SetGridWorkingDir("DPMJET_LHC17f2b/ESD/05042018_morefinevzbin");
+ // plugin->SetGridWorkingDir("DPMJET_LHC17f2b/ESD/06042018_samebinas0404_try2nd");
+ // plugin->SetGridWorkingDir("DPMJET_LHC17f2b/ESD/02052018_1");
+
+// plugin->SetGridWorkingDir("DPMJET_LHC17f2b/ESD/11052018");
+//plugin->SetGridWorkingDir("AMPT_LHC17i2_new/ESD/04062018_1");
+ plugin->SetGridWorkingDir("AMPT_LHC17i2_new/ESD/05062018");
+
 
   // Declare alien output directory. Relative to working directory.
   plugin->SetGridOutputDir("output"); // In this case will be $HOME/work/output
@@ -250,7 +268,7 @@ AliAnalysisGrid* CreateAlienHandler(Bool_t isMC,Bool_t fAOD)
    else plugin->SetNrunsPerMaster(1);
 
    if(isMC){
-     plugin->SetSplitMaxInputFileNumber(100);
+     plugin->SetSplitMaxInputFileNumber(250);
    }else{
      if(fAOD){
        //plugin->SetSplitMaxInputFileNumber(10);
@@ -263,6 +281,7 @@ AliAnalysisGrid* CreateAlienHandler(Bool_t isMC,Bool_t fAOD)
        plugin->SetSplitMaxInputFileNumber(100);
      }
    }
+
 
    // Optionally modify the executable name (default analysis.sh)
    plugin->SetExecutable("TaskPt.sh");

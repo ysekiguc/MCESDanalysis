@@ -182,6 +182,7 @@ AliAnalysisTaskSEpPbCorrelationsForward::AliAnalysisTaskSEpPbCorrelationsForward
       fh2_FMD_eta_phi_prim(0),
       fh2_FMD_eta_dphi_prim(0),
       fhistFMDMC(0),
+      fhistFMDMCmom(0),
       fh2_FMD_correta(0),
       fh2_FMD_propoint(0),
       fh2_FMD_eta_proz(0),
@@ -360,6 +361,7 @@ AliAnalysisTaskSEpPbCorrelationsForward::AliAnalysisTaskSEpPbCorrelationsForward
       fh2_FMD_eta_phi_prim(0),
       fh2_FMD_eta_dphi_prim(0),
       fhistFMDMC(0),
+      fhistFMDMCmom(0),
       fh2_FMD_correta(0),
       fh2_FMD_propoint(0),
       fh2_FMD_eta_proz(0),
@@ -668,6 +670,9 @@ void AliAnalysisTaskSEpPbCorrelationsForward::DefinedQAHistos() {
 	const	 Double_t MaxFMDMC[5]={10,6,21*TMath::Pi()/20.,100.,10};
 	fhistFMDMC=new THnSparseF("fhistFMDMC","fhistFMDMC",5,ifmdmcbin,MinFMDMC,MaxFMDMC);
 	fOutputList2->Add(fhistFMDMC);
+
+	fhistFMDMCmom=new THnSparseF("fhistFMDMCmom","fhistFMDMCmom",5,ifmdmcbin,MinFMDMC,MaxFMDMC);
+	fOutputList2->Add(fhistFMDMCmom);
 
     fh2_FMD_correta=new TH2D("fh2_FMD_correta","fh2_FMD_correta",200,-4,6,200,-4,6);
     fOutputList2->Add(fh2_FMD_correta);
@@ -1318,11 +1323,13 @@ void AliAnalysisTaskSEpPbCorrelationsForward::UserExec(Option_t *) {
   bSign = (InputEvent()->GetMagneticField() > 0) ? 1 : -1;
 
   // Multiplicity Object
-  if(fcollisiontype=="pPb"){
+  if(fcollisiontype=="pPb" || fcollisiontype=="PbPb"){
+	cout<<"i am here"<<endl;
     if(frun2){
       //AliMultSelection *multSelection =    (AliMultSelection *)fEvent->FindListObject("MultSelection");
       lCentrality = multSelection->GetMultiplicityPercentile(fCentType);
-      Int_t qual = multSelection->GetEvSelCode();
+	  //	  cout<<"hgoehgoehgoehgoe"<<lCentrality<<endl;
+	  Int_t qual = multSelection->GetEvSelCode();
       if (qual == 199)  lCentrality = -999;
     } else{
       AliCentrality *centobj = 0;
@@ -1786,6 +1793,9 @@ void AliAnalysisTaskSEpPbCorrelationsForward::MakeAna() {
 		  
 		  Double_t mcqa[5]={detamc,GetRefEta(ref,kTRUE),dphimc,lCentrality,tPrimaryVtxPosition[2]};
 		  fhistFMDMC->Fill(mcqa);
+
+		  Double_t mcqa1[5]={detamc,etamom,dphimc,lCentrality,tPrimaryVtxPosition[2]};
+		  fhistFMDMCmom->Fill(mcqa1);
 		  
 		  fh2_FMD_correta->Fill(GetRefEta(ref,kTRUE),etamom); 
 		  fh2_FMD_propoint->Fill(proverz,proverr);

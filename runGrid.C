@@ -1,5 +1,5 @@
 {
-  char *gridMode="";
+  char *gridMode="full";
   Bool_t iAODAnalysis =kFALSE;
   Bool_t useMC =kTRUE;
   Bool_t frun2=kTRUE;
@@ -91,18 +91,20 @@
     gROOT->LoadMacro("CreateAlienHandler.C");
     AliAnalysisGrid *alienHandler = CreateAlienHandler(useMC,iAODAnalysis);
     mgr->SetGridHandler(alienHandler);
-    //  if (!alienHandler) return;
   }else{
     if(useMC){
       if(iAODAnalysis){
         TChain* chain=new TChain("aodTree");
-	//       chain->Add("/Users/yuko/alicework/alice_data/2017/LHC17f2b_fast/265309/001/AliAOD.root");//DPMJET
-       chain->Add("/home/yuko/work/local_alicework/MCESDanalysis/ali_data/AliAOD.root");//DPMJET
+	//       chain->Add("/Users/sekiguchi/alicework/alice_data/2017/LHC17f2b_fast/265309/001/AliAOD.root");//DPMJET
+       chain->Add("/home/sekiguchi/work/local_alicework/MCESDanalysis/ali_data/AliAOD.root");//DPMJET
 
       }else{
         TChain* chain=new TChain("esdTree");
-        chain->Add("/home/yuko/work/local_alicework/MCESDanalysis/ali_data/AliESDs.root");//DPMJET
-        //        chain->Add("/Users/yuko/alicework/alice_data/2017/LHC17f2b_fast/265309/001/AliESDs.root");//DPMJET
+		//    chain->Add("/home/sekiguchi/work/local_alicework/MCESDanalysis/ali_data/AliESDs.root");//DPMJET
+        //        chain->Add("/Users/sekiguchi/alicework/alice_data/2017/LHC17f2b_fast/265309/001/AliESDs.root");//DPMJET
+		//		chain->Add("/home/sekiguchi/work/local_alicework/MCESDanalysis/ali_data/AliESDs.root");//DPMJET
+		chain->Add("/home/sekiguchi/work/local_alicework/MCESDanalysis/ali_data_PbPb/001/AliESDs.root");//AMPT of PbPb
+		chain->Add("/home/sekiguchi/work/local_alicework/MCESDanalysis/ali_data_PbPb/002/AliESDs.root");//AMPT of PbPb
       }
 
     }else{
@@ -134,14 +136,14 @@ else{
 
 //  Create the analysis manager
   // if AOD , AliMCEventHander is not necessary
-    // if (useMC && !iAODAnalysis) {
+  // if (useMC && !iAODAnalysis) {
 
 
   if(useMC){
       AliMCEventHandler* mcHandler = new AliMCEventHandler();
      mgr->SetMCtruthEventHandler(mcHandler);
      mcHandler->SetReadTR(useMC);
-    }
+  }
 
    if(!iAODAnalysis){
      AliESDInputHandler* esdH = new AliESDInputHandler();
@@ -154,42 +156,40 @@ else{
    if(frun2){
    gROOT->LoadMacro("$ALICE_PHYSICS/OADB/macros/AddTaskPhysicsSelection.C");
    AddTaskPhysicsSelection(useMC,kTRUE);
-   gROOT->LoadMacro("$ALICE_PHYSICS/OADB/COMMON/MULTIPLICITY/macros/AddTaskMultSelection.C");
-   AddTaskMultSelection();
-   }
+ 
+  gROOT->LoadMacro("$ALICE_PHYSICS/OADB/COMMON/MULTIPLICITY/macros/AddTaskMultSelection.C");
+  //  AddTaskMultSelection();
+  AliMultSelectionTask * taskMult = AddTaskMultSelection(); //
+  if(useMC){
+	taskMult->SetUseDefaultMCCalib(1);
+	taskMult->SetAlternateOADBFullManualBypassMC("$ALICE_PHYSICS/OADB/COMMON/MULTIPLICITY/data/OADB-LHC15o.root");
+  }
+  }
 
    gROOT->LoadMacro("$ALICE_ROOT/ANALYSIS/macros/AddTaskPIDResponse.C");
    //   AliAnalysisTaskPIDResponse *taskPID=AddTaskPIDResponse(kFALSE,kFALSE,kTRUE,1);
    AddTaskPIDResponse(useMC);
-
-
+   
    //
- //  //   gROOT->LoadMacro("AddTaskPIDResponse.C");
- //  Bool_t isMC = kFALSE;
- //  Bool_t autoMCesd = kTRUE;
- //  Bool_t tuneOnData = kFALSE;
- //  Int_t recoPass = 2;
- //  Bool_t cachePID = kFALSE;
- //  Bool_t useTPCEtaCorrection = kTRUE;
- //  Bool_t useTPCMultiplicityCorrection = kFALSE;
- //   Int_t recoDataPass = 2;
- //  //  Int_t recoDataPass = 2;
- //
- //  AliAnalysisTaskSE *setupTask = AddTaskPIDResponse(isMC,autoMCesd,tuneOnData,recoPass,cachePID,"",useTPCEtaCorrection,useTPCMultiplicityCorrection,recoDataPass);
- //
-
+   //  //   gROOT->LoadMacro("AddTaskPIDResponse.C");
+   //  Bool_t isMC = kFALSE;
+   //  Bool_t autoMCesd = kTRUE;
+   //  Bool_t tuneOnData = kFALSE;
+   //  Int_t recoPass = 2;
+   //  Bool_t cachePID = kFALSE;
+   //  Bool_t useTPCEtaCorrection = kTRUE;
+   //  Bool_t useTPCMultiplicityCorrection = kFALSE;
+   //   Int_t recoDataPass = 2;
+   //  //  Int_t recoDataPass = 2;
+   //
+   //  AliAnalysisTaskSE *setupTask = AddTaskPIDResponse(isMC,autoMCesd,tuneOnData,recoPass,cachePID,"",useTPCEtaCorrection,useTPCMultiplicityCorrection,recoDataPass);
 
    gROOT->LoadMacro("AliAnalysisTaskSEpPbCorrelationsForward.cxx++g");
    gROOT->LoadMacro("AddTaskpPbCorrelationsForward.C");
    AliAnalysisTaskSEpPbCorrelationsForward* ana =AddTaskpPbCorrelationsForward();
-
-
    // Enable debug printouts
-
    mgr->SetDebugLevel(0);
-
    if (!mgr->InitAnalysis()) return;
-
    mgr->PrintStatus();
    // Start analysis in grid.
    if(gridMode!=""){
