@@ -241,6 +241,25 @@ private:
   TH2D *fHistMass_bumpcorr;
   THnSparseF *fHist_V0QA;
   THnSparseF *fHist_CascadeQA;
+  THnSparseF *fHistMass_Lambda_MC;
+  Double_t fNEntries;
+  AliVEvent* inputEvent;
+  AliAODEvent *fEvent; //  AOD Event
+  AliESDEvent *fESD; //  AOD Even
+  AliMCEventHandler* mctruth;
+  AliMCEvent* mcEvent;
+  const AliVVertex *lPrimaryBestVtx;
+  Double_t fPrimaryZVtx;
+  AliESDVZERO *fvzero;
+  AliEventPoolManager *fPoolMgr;  //  event pool manager for Event Mixing
+  AliEventPoolManager *fPoolMgr1; //  event pool manager for Event Mixing
+  Double_t poolmin;
+  Double_t poolmax;
+  Int_t fPoolMaxNEvents;   // set maximum number of events in the pool
+  Int_t fPoolMinNTracks;   // set minimum number of tracks in the pool
+  Int_t fMinEventsToMix;   // set the minimum number of events want to mix
+
+
   TH2D *fHist_AP[6];
   TH2D *fHistPosNsig[6];
   TH2D *fHistNsig[6];
@@ -249,36 +268,16 @@ private:
   TH2D *fHistPosNsigQA[6];
   TH3D* fh3NegNsig[3];
   TH3D* fh3PosNsig[3];
-
-  THnSparseF *fHistMass_Lambda_MC;
-
   //	Double_t fPtMinDaughter;
-  Double_t fNEntries;
-  AliVEvent* inputEvent;
-  AliAODEvent *fEvent; //  AOD Event
-  AliESDEvent *fESD; //  AOD Even
-
-  AliMCEventHandler* mctruth;
-  AliMCEvent* mcEvent;
   //  AliESDtrackCuts*fTrackCuts;
   //AliAODVertex *lPrimaryBestVtx;
-  const AliVVertex *lPrimaryBestVtx;
-
-
   Double_t tPrimaryVtxPosition[3];
-  Double_t fPrimaryZVtx;
+
 
   //  AliAODVZERO *fvzero;
-  AliESDVZERO *fvzero;
+
 
   // Event Pool for mixing
-  AliEventPoolManager *fPoolMgr;  //  event pool manager for Event Mixing
-  AliEventPoolManager *fPoolMgr1; //  event pool manager for Event Mixing
-  Double_t poolmin;
-  Double_t poolmax;
-  Int_t fPoolMaxNEvents;   // set maximum number of events in the pool
-  Int_t fPoolMinNTracks;   // set minimum number of tracks in the pool
-  Int_t fMinEventsToMix;   // set the minimum number of events want to mix
   Int_t fNzVtxBins;        // number of z vrtx bins
   Double_t fZvtxBins[100]; // [fNzVtxBinsDim]
   Int_t fNCentBins;        // number of centrality bins
@@ -297,11 +296,12 @@ private:
   AliTHn* fhistmcprim;
   TH2D*fhmcprimvzeta;
   TH1D*fhmcprimpdgcode;
+  TH1F* fDecayType;
   TH1D*fhrefetaFMD[4];
   TH1D*fhrefphiFMD[4];
   
 
-  TH1F* fDecayType;
+
   TH1F* fPiCheckMom;
   TH1F* fPiCheck;
   TH1F*fmultreffmd;
@@ -311,8 +311,9 @@ private:
   TH2F* fRefEtaPhi[10];
   TH2F* fPrimEtaPhiCent[11];
   TH2F* fRefEtaPhiCent[11];
-  TH2F* fRefEtaPhiNotCorr;
   TH2F* fMultRefEtaPhi;
+  TH2F* fRefEtaPhiNotCorr;
+
   TH2F *fdNdetaOrigin;
   TH2F *fdNdetaOrigin2D;
   TH2F *fdNdetaOriginVZERO;
@@ -331,6 +332,7 @@ private:
   TH2D*  fh2_FMD_eta_deta[11];
   THnSparseF* fhistFMDMC;
   THnSparseF* fhistFMDMCmom;
+  THnSparseF* fhistmcprimcorr;
   TH2D*  fh2_FMD_correta;
   TH2D*  fh2_FMD_propoint;
   TH2D*  fh2_FMD_eta_proz;
