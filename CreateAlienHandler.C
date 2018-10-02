@@ -12,8 +12,9 @@ AliAnalysisGrid* CreateAlienHandler(Bool_t isMC,Bool_t fAOD)
   AliAnalysisAlien *plugin = new AliAnalysisAlien();
   plugin->SetOverwriteMode();
   plugin->SetMergeViaJDL(1);//
-  //  plugin->SetRunMode("full");
-  plugin->SetRunMode("terminate");
+  //
+  //    plugin->SetRunMode("full");
+      plugin->SetRunMode("terminate");
   //  plugin->SetRunMode("test");
 
   //Set versions of used packages
@@ -163,8 +164,7 @@ AliAnalysisGrid* CreateAlienHandler(Bool_t isMC,Bool_t fAOD)
 	plugin->SetDataPattern("/*/AliESDs.root");
 	  
 	      plugin->AddRunNumber(265309);
-
-	/*
+		  /*
 	      plugin->AddRunNumber(265332);
      
 	  
@@ -199,7 +199,7 @@ AliAnalysisGrid* CreateAlienHandler(Bool_t isMC,Bool_t fAOD)
       plugin->AddRunNumber(265501);
       plugin->AddRunNumber(265521);
       plugin->AddRunNumber(265525);
-	  */
+		  */
 
     }else if(method==2){
 
@@ -267,7 +267,11 @@ AliAnalysisGrid* CreateAlienHandler(Bool_t isMC,Bool_t fAOD)
   //plugin->SetGridWorkingDir("EPOS_LHC17f2a/30072018_tpctpcreco_modiryptbin");
   //  plugin->SetGridWorkingDir("EPOS_LHC17f2a/30072018_tpcfmdprim_modiryptbin");
   //  plugin->SetGridWorkingDir("EPOS_LHC17f2a/30072018_tpcfmdreco_modiryptbin");
-  plugin->SetGridWorkingDir("EPOS_LHC17f2a/ESD/06082018_265309");
+  //  plugin->SetGridWorkingDir("EPOS_LHC17f2a/ESD/06082018_265309");
+  //  plugin->SetGridWorkingDir("EPOS_LHC17f2a/ESD/03092018");
+  //  plugin->SetGridWorkingDir("EPOS_LHC17f2a/ESD/03092018_265309");
+  //  plugin->SetGridWorkingDir("EPOS_LHC17f2a/ESD/04092018_265309");
+  plugin->SetGridWorkingDir("EPOS_LHC17f2a/ESD/05092018_265309_2");
 
 
   // Declare alien output directory. Relative to working directory.
@@ -303,8 +307,8 @@ AliAnalysisGrid* CreateAlienHandler(Bool_t isMC,Bool_t fAOD)
    else plugin->SetNrunsPerMaster(1);
 
    if(isMC){
-          plugin->SetSplitMaxInputFileNumber(5);
-     //     plugin->SetSplitMaxInputFileNumber(200);
+	 //         plugin->SetSplitMaxInputFileNumber(5);
+          plugin->SetSplitMaxInputFileNumber(200);
    }else{
      if(fAOD){
        //plugin->SetSplitMaxInputFileNumber(10);

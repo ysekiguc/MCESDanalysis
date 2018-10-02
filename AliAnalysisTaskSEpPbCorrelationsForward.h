@@ -96,6 +96,7 @@ private:
   TObjArray *GetAcceptedCascadeTracks(const AliAODEvent *faod);
   TObjArray *GetAcceptedTracksAssociated(AliAODEvent *faod);
 
+  Bool_t AddMotherIfFirstTimeSeen(AliMCParticle*p, std::vector<Int_t> v);
   TObjArray* GetFMDhitsYS(Bool_t Aside);
   Bool_t IsAcceptedDaughterTrack(const AliAODTrack *itrack);
   Bool_t IsAcceptedPhiDaughterTrack(const AliAODTrack *itrack);

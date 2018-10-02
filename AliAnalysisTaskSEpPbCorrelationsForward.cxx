@@ -664,19 +664,23 @@ void AliAnalysisTaskSEpPbCorrelationsForward::DefinedQAHistos() {
 	fOutputList2->Add(fh2_FMD_eta_deta[i]);
 	}
 		
-	const Int_t ifmdmcbin[5]={200,200,20,20,40};
-	const	 Double_t MinFMDMC[5]={-10,-4,-19*TMath::Pi()/20.,0.,-10};
-	const	 Double_t MaxFMDMC[5]={10,6,21*TMath::Pi()/20.,100.,10};
-	fhistFMDMC=new THnSparseF("fhistFMDMC","fhistFMDMC",5,ifmdmcbin,MinFMDMC,MaxFMDMC);
+	const Int_t ifmdmcbin_all[6]={200,200,20,10,20,200};
+	const	 Double_t MinFMDMC_all[6]={-3.975,-4,-19*TMath::Pi()/20.,0.,-10,-10};
+	const	 Double_t MaxFMDMC_all[6]={6.025,6,21*TMath::Pi()/20.,100.,10,10};
+	fhistFMDMC=new THnSparseF("fhistFMDMC","fhistFMDMC",6,ifmdmcbin_all,MinFMDMC_all,MaxFMDMC_all);
 	fOutputList2->Add(fhistFMDMC);
+
+		const Int_t ifmdmcbin[5]={200,200,20,20,40};
+	const	 Double_t MinFMDMC[5]={-3.975,-4,-19*TMath::Pi()/20.,0.,-10};
+	const	 Double_t MaxFMDMC[5]={6.025,6,21*TMath::Pi()/20.,100.,10};
 
 	fhistFMDMCmom=new THnSparseF("fhistFMDMCmom","fhistFMDMCmom",5,ifmdmcbin,MinFMDMC,MaxFMDMC);
 	fOutputList2->Add(fhistFMDMCmom);
 	
-	const Int_t imcprimcorr[4]={200,20,20,20};
-	const Double_t Minmcprimcorr[4]={-10.,0,0,-10.};
-	const Double_t Maxmcprimcorr[4]={10.,2*TMath::Pi(),100,10.};
-	fhistmcprimcorr=new THnSparseF("fhistmcprimcorr","fhistmcprimcorr",4,imcprimcorr,Minmcprimcorr,Maxmcprimcorr);
+	const Int_t imcprimcorr[5]={200,200,20,20,20};
+	const Double_t Minmcprimcorr[5]={-10.,-4.,0,0,-10.};
+	const Double_t Maxmcprimcorr[5]={10.,6.,2*TMath::Pi(),100,10.};
+	fhistmcprimcorr=new THnSparseF("fhistmcprimcorr","fhistmcprimcorr",5,imcprimcorr,Minmcprimcorr,Maxmcprimcorr);
 	fOutputList2->Add(fhistmcprimcorr);
 								   
     fh2_FMD_correta=new TH2D("fh2_FMD_correta","fh2_FMD_correta",200,-4,6,200,-4,6);
@@ -1587,6 +1591,7 @@ void AliAnalysisTaskSEpPbCorrelationsForward::MakeAna() {
         }
       //  cout<<fNEntries<<" "<<"number of primary"<<hoge1<<endl;
     }else{
+	  std::vector<Int_t> listOfMothers;
       //ESD MC analysis
       int np=mcEvent->GetNumberOfTracks();
       int nprim=mcEvent->GetNumberOfPrimaries();
@@ -1720,7 +1725,6 @@ void AliAnalysisTaskSEpPbCorrelationsForward::MakeAna() {
 			fPrimEtaPhi[vzbin-1]->Fill(mcTrackEta,mcTrackPhi);
 			fPrimEtaPhiCent[centbin-1]->Fill(mcTrackEta,mcTrackPhi);
 			fdNdetaOrigin2D->Fill(mcTrackEta,mcTrackPhi);
-			
 		  }
 		  
 		  
@@ -1816,6 +1820,7 @@ void AliAnalysisTaskSEpPbCorrelationsForward::MakeAna() {
 	  
 	  }
 	  //cout<<a<<endl;
+
 	  Double_t phimom=mtrack->Phi();
 	  Double_t etamom=mtrack->Eta();
 	  Double_t proverx=track->Xv();
@@ -1832,24 +1837,25 @@ void AliAnalysisTaskSEpPbCorrelationsForward::MakeAna() {
 		  Double_t detamc=etamom-GetRefEta(ref,kTRUE);
 		  fh2_FMD_eta_dphi_prim->Fill(etamom,phimom);
  		  
-		  
-
 		  fh2_FMD_eta_dphi[bincent-1]->Fill(GetRefEta(ref,kTRUE),dphimc); 
 		  fh2_FMD_eta_deta[bincent-1]->Fill(GetRefEta(ref,kTRUE),detamc);
 		  
-		  Double_t mcqa[5]={detamc,GetRefEta(ref,kTRUE),dphimc,lCentrality,tPrimaryVtxPosition[2]};
+		  Double_t mcqa[6]={detamc,GetRefEta(ref,kTRUE),dphimc,lCentrality,tPrimaryVtxPosition[2],etamom};
 		  fhistFMDMC->Fill(mcqa);
-
-		  Double_t mcqa1[5]={detamc,etamom,dphimc,lCentrality,tPrimaryVtxPosition[2]};
-		  fhistFMDMCmom->Fill(mcqa1);
-		  
-		  Double_t mcprim[4]={etamom,phimom,lCentrality,tPrimaryVtxPosition[2]};
-		  fhistmcprimcorr->Fill(mcprim);
 		  
 		  fh2_FMD_correta->Fill(GetRefEta(ref,kTRUE),etamom); 
 		  fh2_FMD_propoint->Fill(proverz,proverr);
 		  fh2_FMD_eta_proz->Fill(GetRefEta(ref,kFALSE),proverz);
 		  
+		  Double_t mcqa1[5]={detamc,etamom,dphimc,lCentrality,tPrimaryVtxPosition[2]};
+		  fhistFMDMCmom->Fill(mcqa1);
+		  
+		  Bool_t isNewPrimary= AddMotherIfFirstTimeSeen(mtrack,listOfMothers);
+		  if(!isNewPrimary){
+			listOfMothers.push_back(mtrack->GetLabel());
+			Double_t mcprim[5]={etamom,GetRefEta(ref,kTRUE),phimom,lCentrality,tPrimaryVtxPosition[2]};
+			fhistmcprimcorr->Fill(mcprim);
+		  }
 		}
 	  }
 	  
@@ -1976,6 +1982,20 @@ void AliAnalysisTaskSEpPbCorrelationsForward::MakeAna() {
   delete selectedTrackV0A;
   selectedTrackV0C->Clear();
   delete selectedTrackV0C;
+
+}
+
+Bool_t AliAnalysisTaskSEpPbCorrelationsForward::AddMotherIfFirstTimeSeen(AliMCParticle*p,std::vector<Int_t> v){
+  if(v.empty()){
+	return false;
+  }
+  Int_t x=p->GetLabel();
+  if(std::find(v.begin(),v.end(),x)!=v.end()){
+	return true;
+  }else{
+	return false;
+  }
+
 
 }
 
@@ -3731,8 +3751,7 @@ void AliAnalysisTaskSEpPbCorrelationsForward::SetupCuts() {
       -44.36325744603266, 403.8361229278572, 394.70251110073286, 393.39770941114364,
       385.5688992736084, 386.22130011840306, 361.4300680162082, 352.9488570338784,
       93.94572165042246, 91.98851911603867, 86.76931235768188, 80.89770475453042,
-      -33.92484392931908, -45.01565829082733, -45.01565829082733, -51.539666738773235,
-      -50.88726589397868, -79.59290306494108, -80.24530390973564, -95.25052334001145,
+      -33.92484392931908, -45.01565829082733, -45.01565829082733, -51.539666738773235,      -50.88726589397868, -79.59290306494108, -80.24530390973564, -95.25052334001145,
       -95.25052334001145, -292.9279793127751, -320.3288147941483, -304.0187936742833
     };
     const Double_t ys[npoints] = {
